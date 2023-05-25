@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Rent_MallModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Mall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount_P" Type="int" />
+          <Property Name="Town" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cost" Type="money" />
+          <Property Name="Coeff_cost" Type="float" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="Image" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Pavilion">
+          <Key>
+            <PropertyRef Name="Num_pav" />
+            <PropertyRef Name="ID_mall" />
+          </Key>
+          <Property Name="Num_pav" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ID_mall" Type="int" Nullable="false" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="70" />
+          <Property Name="Square" Type="int" />
+          <Property Name="Cost_meter" Type="int" />
+          <Property Name="Coeff_cost" Type="float" />
+          <Property Name="old" Type="int" />
+        </EntityType>
+        <EntityType Name="Rent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID_tenan" Type="int" />
+          <Property Name="ID_Mall" Type="int" />
+          <Property Name="ID_workers" Type="int" />
+          <Property Name="Num_pav" Type="nvarchar" MaxLength="10" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Start_rent" Type="date" />
+          <Property Name="End_rent" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tenants">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Adress" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Workers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="First_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Second_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Middle_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <Association Name="FK_Pavil_Mall">
+          <End Role="Mall" Type="Self.Mall" Multiplicity="1" />
+          <End Role="Pavilion" Type="Self.Pavilion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Pavilion">
+              <PropertyRef Name="ID_mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Mall">
+          <End Role="Mall" Type="Self.Mall" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_Mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Pavil">
+          <End Role="Pavilion" Type="Self.Pavilion" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pavilion">
+              <PropertyRef Name="Num_pav" />
+              <PropertyRef Name="ID_mall" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="Num_pav" />
+              <PropertyRef Name="ID_Mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Tenants">
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_tenan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Workers">
+          <End Role="Workers" Type="Self.Workers" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_workers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Rent_MallModelContainer">
+          <EntitySet Name="Mall" EntityType="Self.Mall" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pavilion" EntityType="Self.Pavilion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tenants" EntityType="Self.Tenants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Workers" EntityType="Self.Workers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Pavil_Mall" Association="Self.FK_Pavil_Mall">
+            <End Role="Mall" EntitySet="Mall" />
+            <End Role="Pavilion" EntitySet="Pavilion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Mall" Association="Self.FK_Rent_Mall">
+            <End Role="Mall" EntitySet="Mall" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Pavil" Association="Self.FK_Rent_Pavil">
+            <End Role="Pavilion" EntitySet="Pavilion" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Tenants" Association="Self.FK_Rent_Tenants">
+            <End Role="Tenants" EntitySet="Tenants" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Workers" Association="Self.FK_Rent_Workers">
+            <End Role="Workers" EntitySet="Workers" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Rent_MallModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Mall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount_P" Type="Int32" />
+          <Property Name="Town" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Coeff_cost" Type="Double" />
+          <Property Name="Floor" Type="Int32" />
+          <Property Name="Image" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Pavilion" Relationship="Self.FK_Pavil_Mall" FromRole="Mall" ToRole="Pavilion" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_Rent_Mall" FromRole="Mall" ToRole="Rent" />
+        </EntityType>
+        <EntityType Name="Pavilion">
+          <Key>
+            <PropertyRef Name="Num_pav" />
+            <PropertyRef Name="ID_mall" />
+          </Key>
+          <Property Name="Num_pav" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID_mall" Type="Int32" Nullable="false" />
+          <Property Name="Floor" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Square" Type="Int32" />
+          <Property Name="Cost_meter" Type="Int32" />
+          <Property Name="Coeff_cost" Type="Double" />
+          <Property Name="old" Type="Int32" />
+          <NavigationProperty Name="Mall" Relationship="Self.FK_Pavil_Mall" FromRole="Pavilion" ToRole="Mall" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_Rent_Pavil" FromRole="Pavilion" ToRole="Rent" />
+        </EntityType>
+        <EntityType Name="Rent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID_tenan" Type="Int32" />
+          <Property Name="ID_Mall" Type="Int32" />
+          <Property Name="ID_workers" Type="Int32" />
+          <Property Name="Num_pav" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Start_rent" Type="DateTime" Precision="0" />
+          <Property Name="End_rent" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Mall" Relationship="Self.FK_Rent_Mall" FromRole="Rent" ToRole="Mall" />
+          <NavigationProperty Name="Pavilion" Relationship="Self.FK_Rent_Pavil" FromRole="Rent" ToRole="Pavilion" />
+          <NavigationProperty Name="Tenants" Relationship="Self.FK_Rent_Tenants" FromRole="Rent" ToRole="Tenants" />
+          <NavigationProperty Name="Workers" Relationship="Self.FK_Rent_Workers" FromRole="Rent" ToRole="Workers" />
+        </EntityType>
+        <EntityType Name="Tenants">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Adress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_Rent_Tenants" FromRole="Tenants" ToRole="Rent" />
+        </EntityType>
+        <EntityType Name="Workers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Second_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Middle_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rent" Relationship="Self.FK_Rent_Workers" FromRole="Workers" ToRole="Rent" />
+        </EntityType>
+        <Association Name="FK_Pavil_Mall">
+          <End Role="Mall" Type="Self.Mall" Multiplicity="1" />
+          <End Role="Pavilion" Type="Self.Pavilion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Pavilion">
+              <PropertyRef Name="ID_mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Mall">
+          <End Role="Mall" Type="Self.Mall" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_Mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Pavil">
+          <End Role="Pavilion" Type="Self.Pavilion" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pavilion">
+              <PropertyRef Name="Num_pav" />
+              <PropertyRef Name="ID_mall" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="Num_pav" />
+              <PropertyRef Name="ID_Mall" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Tenants">
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenants">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_tenan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rent_Workers">
+          <End Role="Workers" Type="Self.Workers" Multiplicity="0..1" />
+          <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rent">
+              <PropertyRef Name="ID_workers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Rent_MallEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Mall" EntityType="Self.Mall" />
+          <EntitySet Name="Pavilion" EntityType="Self.Pavilion" />
+          <EntitySet Name="Rent" EntityType="Self.Rent" />
+          <EntitySet Name="Tenants" EntityType="Self.Tenants" />
+          <EntitySet Name="Workers" EntityType="Self.Workers" />
+          <AssociationSet Name="FK_Pavil_Mall" Association="Self.FK_Pavil_Mall">
+            <End Role="Mall" EntitySet="Mall" />
+            <End Role="Pavilion" EntitySet="Pavilion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Mall" Association="Self.FK_Rent_Mall">
+            <End Role="Mall" EntitySet="Mall" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Pavil" Association="Self.FK_Rent_Pavil">
+            <End Role="Pavilion" EntitySet="Pavilion" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Tenants" Association="Self.FK_Rent_Tenants">
+            <End Role="Tenants" EntitySet="Tenants" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rent_Workers" Association="Self.FK_Rent_Workers">
+            <End Role="Workers" EntitySet="Workers" />
+            <End Role="Rent" EntitySet="Rent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Rent_MallModelContainer" CdmEntityContainer="Rent_MallEntities">
+          <EntitySetMapping Name="Mall">
+            <EntityTypeMapping TypeName="Rent_MallModel.Mall">
+              <MappingFragment StoreEntitySet="Mall">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Amount_P" ColumnName="Amount_P" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Coeff_cost" ColumnName="Coeff_cost" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pavilion">
+            <EntityTypeMapping TypeName="Rent_MallModel.Pavilion">
+              <MappingFragment StoreEntitySet="Pavilion">
+                <ScalarProperty Name="Num_pav" ColumnName="Num_pav" />
+                <ScalarProperty Name="ID_mall" ColumnName="ID_mall" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Square" ColumnName="Square" />
+                <ScalarProperty Name="Cost_meter" ColumnName="Cost_meter" />
+                <ScalarProperty Name="Coeff_cost" ColumnName="Coeff_cost" />
+                <ScalarProperty Name="old" ColumnName="old" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rent">
+            <EntityTypeMapping TypeName="Rent_MallModel.Rent">
+              <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_tenan" ColumnName="ID_tenan" />
+                <ScalarProperty Name="ID_Mall" ColumnName="ID_Mall" />
+                <ScalarProperty Name="ID_workers" ColumnName="ID_workers" />
+                <ScalarProperty Name="Num_pav" ColumnName="Num_pav" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Start_rent" ColumnName="Start_rent" />
+                <ScalarProperty Name="End_rent" ColumnName="End_rent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tenants">
+            <EntityTypeMapping TypeName="Rent_MallModel.Tenants">
+              <MappingFragment StoreEntitySet="Tenants">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workers">
+            <EntityTypeMapping TypeName="Rent_MallModel.Workers">
+              <MappingFragment StoreEntitySet="Workers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Second_Name" ColumnName="Second_Name" />
+                <ScalarProperty Name="Middle_Name" ColumnName="Middle_Name" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
